@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import java.time.LocalDateTime;
+
 @Service
 public class LikeService {
     @Autowired
@@ -18,6 +20,25 @@ public class LikeService {
         Pageable firstPage = PageRequest.of(page, pageSize);
         List<Like> allLikes=likeRepository.findBypostorcommentID(postOrCommentId,firstPage);
         return  allLikes;
+    }
+    public int countLikes(String postOrCommentId){
+        List<Like> allData=likeRepository.findAll();
+        int count=0;
+        for(Like like:allData){
+            if(like.getPostOrCommentId().equals(postOrCommentId)){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public Like likeDetailsByID(String likeId){
+        return likeRepository.findById(likeId).get();
+}
+    public Like likeCreate(Like like, String postOrCommentId){
+        like.setPostOrCommentId(postOrCommentId);
+        like.setCreatedAt(LocalDateTime.now());
+        return likeRepository.save(like);
 
     }
 }
