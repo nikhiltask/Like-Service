@@ -16,6 +16,10 @@ public class LikeService {
     @Autowired
     private LikeRepository likeRepository;
 
+    public String deleteLikeID(String likeId){
+        likeRepository.deleteById(likeId);
+        return "Deleted  "+likeId+" successfully";
+    }
     public List<Like> likesPage(String postOrCommentId, int page, int pageSize){
         Pageable firstPage = PageRequest.of(page, pageSize);
         List<Like> allLikes=likeRepository.findBypostorcommentID(postOrCommentId,firstPage);
