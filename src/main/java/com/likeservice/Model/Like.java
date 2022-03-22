@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Document(collection = "LikeService")
@@ -23,9 +24,9 @@ public class Like {
     @NotEmpty(message = "user ID is required")
     private String userID;
 
-    private String postOrCommentId;
+    private String postorcommentID;
 
     private String likedBy;
 
-    private Date createdAt;
+    private LocalDateTime createdAt;
 }
