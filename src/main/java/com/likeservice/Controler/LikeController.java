@@ -7,6 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.ws.rs.QueryParam;
+import java.util.List;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +23,11 @@ public class LikeController {
     @Autowired
     private LikeService likeService;
 
-    @GetMapping("/postsOrComments/{postOrCommentId}/likes/count")
+    @GetMapping("/postsOrComments/{postOrCommentId}/likes")
+    public ResponseEntity<List<Like>> likesPage(@PathVariable("postOrCommentId") String postOrCommentId, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize){
+        return new ResponseEntity<>(likeService.likesPage(postOrCommentId,page,pageSize), HttpStatus.ACCEPTED);
+    }
+      @GetMapping("/postsOrComments/{postOrCommentId}/likes/count")
     public ResponseEntity<Integer> countLikes(@PathVariable("postOrCommentId") String postOrCommentId){
         return new ResponseEntity<>(likeService.countLikes(postOrCommentId), HttpStatus.ACCEPTED);
     }
