@@ -12,6 +12,9 @@ public class LikeService {
     @Autowired
     private LikeRepository likeRepository;
 
+    public Like likeDetailsByID(String likeId){
+        return likeRepository.findById(likeId).get();
+}
     public Like likeCreate(Like like, String postOrCommentId){
         like.setPostOrCommentId(postOrCommentId);
         like.setCreatedAt(LocalDateTime.now());
