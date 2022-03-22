@@ -19,6 +19,10 @@ public class LikeController {
     @Autowired
     private LikeService likeService;
 
+    @GetMapping("/postsOrComments/{postOrCommentId}/likes/count")
+    public ResponseEntity<Integer> countLikes(@PathVariable("postOrCommentId") String postOrCommentId){
+        return new ResponseEntity<>(likeService.countLikes(postOrCommentId), HttpStatus.ACCEPTED);
+    }
     @GetMapping("/postsOrComments/{postOrCommentId}/likes/{likeId}")
     public ResponseEntity<Like> likeDetailsByID(@PathVariable("likeId") String Id, @PathVariable("postOrCommentId") String postOrCommentId){
         return new ResponseEntity<>(likeService.likeDetailsByID(Id), HttpStatus.ACCEPTED);
@@ -28,3 +32,4 @@ public class LikeController {
         return new ResponseEntity<>(likeService.likeCreate(like,postOrCommentId), HttpStatus.ACCEPTED);
     }
 }
+
