@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.time.LocalDateTime;
 
 @Service
 public class LikeService {
@@ -23,4 +24,13 @@ public class LikeService {
         return count;
     }
 
+    public Like likeDetailsByID(String likeId){
+        return likeRepository.findById(likeId).get();
+}
+    public Like likeCreate(Like like, String postOrCommentId){
+        like.setPostOrCommentId(postOrCommentId);
+        like.setCreatedAt(LocalDateTime.now());
+        return likeRepository.save(like);
+
+    }
 }
