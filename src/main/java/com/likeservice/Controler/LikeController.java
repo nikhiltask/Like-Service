@@ -1,6 +1,7 @@
 package com.likeservice.Controler;
 
 import com.likeservice.Model.Like;
+import com.likeservice.Model.LikeDto;
 import com.likeservice.Service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class LikeController {
         return new ResponseEntity<>(likeService.deleteLikeID(likeId), HttpStatus.ACCEPTED);
     }
     @GetMapping("/postsOrComments/{postOrCommentId}/likes")
-    public ResponseEntity<List<Like>> likesPage(@PathVariable("postOrCommentId") String postOrCommentId, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize){
+    public ResponseEntity<List<LikeDto>> likesPage(@PathVariable("postOrCommentId") String postOrCommentId, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize){
         return new ResponseEntity<>(likeService.likesPage(postOrCommentId,page,pageSize), HttpStatus.ACCEPTED);
     }
       @GetMapping("/postsOrComments/{postOrCommentId}/likes/count")

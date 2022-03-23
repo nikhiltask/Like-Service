@@ -5,28 +5,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
-import java.util.Date;
 
-@Document(collection = "LikeService")
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @ToString
-public class Like {
+public class LikeDto {
 
     @Id
     private String likeID;
 
-//    @NotEmpty(message = "user ID is required")
-//    private String userID;
-
     private String postorcommentID;
+    @NotEmpty(message = "user Object is required")
+    private User likedBy;
 
-    private String likedBy;
 
     private LocalDateTime createdAt;
 }
