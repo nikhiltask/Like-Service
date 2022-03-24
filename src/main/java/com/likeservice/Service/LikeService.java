@@ -24,26 +24,38 @@ public class LikeService {
     private UserService userFeign;
 
     public String deleteLikeID(String likeId){
-        likeRepository.deleteById(likeId);
-        return "Deleted  "+likeId+" successfully";
+        if(likeRepository.findById(likeId).isPresent()) {
+            likeRepository.deleteById(likeId);
+            return "Deleted  " + likeId + " successfully";
+        }else{
+            throw new LikesNotFoundException("Id Not Present");
+        }
     }
 
-public List<LikeDto> likesPage(String postOrCommentId, Integer page, Integer pageSize){
-    Pageable firstPage = PageRequest.of(page, pageSize);
-    List<Like> allLikes=likeRepository.findBypostorcommentID(postOrCommentId,firstPage);
-    if(allLikes.isEmpty()){
-        throw new LikesNotFoundException("Like ID Doesnot Exists");
-    }
-    List<LikeDto> likeDTOS = new ArrayList<>();
-    for(Like like:allLikes){
-        LikeDto likeDTO=new LikeDto(like.getLikeID(),like.getPostorcommentID(),
-                userFeign.findByID(like.getLikedBy()),like.getCreatedAt());
 
-        likeDTOS.add(likeDTO);
-    }
-    return  likeDTOS;
+    public List<LikeDto> likesPage(String postOrCommentId,Integer page, Integer pageSize){
+        if(page==null){
+            page=1;
+        }
+        if(pageSize==null){
+            pageSize=10;
+        }
+        Pageable firstPage = PageRequest.of(page-1, pageSize);
 
-}
+        List<Like> allLikes=likeRepository.findBypostorcommentID(postOrCommentId,firstPage);
+        if(allLikes.isEmpty()){
+            throw new LikesNotFoundException("Like ID Doesnot Exists");
+        }
+        List<LikeDto> likeDTOS = new ArrayList<>();
+        for(Like like:allLikes){
+            LikeDto likeDTO=new LikeDto(like.getLikeID(),like.getPostorcommentID(),
+                    userFeign.findByID(like.getLikedBy()),like.getCreatedAt());
+
+            likeDTOS.add(likeDTO);
+        }
+        return  likeDTOS;
+
+    }
     public int countLikes(String postOrCommentId){
         List<Like> allData=likeRepository.findAll();
         int count=0;
@@ -58,10 +70,14 @@ public List<LikeDto> likesPage(String postOrCommentId, Integer page, Integer pag
     public Like likeDetailsByID(String likeId){
         return likeRepository.findById(likeId).get();
 }
-    public Like likeCreate(Like like, String postOrCommentId){
+    public LikeDto likeCreate(Like like, String postOrCommentId){
         like.setPostorcommentID(postOrCommentId);
         like.setCreatedAt(LocalDateTime.now());
-        return likeRepository.save(like);
+         likeRepository.save(like);
+        LikeDto likeDTO =new LikeDto(like.getLikeID(),like.getPostorcommentID(),
+                userFeign.findByID(like.getLikedBy()),like.getCreatedAt());
+        return likeDTO;
 
     }
+
 }

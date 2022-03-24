@@ -20,6 +20,7 @@ public class LikeDto {
     private String likeID;
 
     private String postorcommentID;
+
     @NotEmpty(message = "user Object is required")
     private User likedBy;
 
