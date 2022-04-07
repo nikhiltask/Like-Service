@@ -24,6 +24,5 @@ public class LikeDto {
     @NotEmpty(message = "user Object is required")
     private User likedBy;
 
-
     private LocalDateTime createdAt;
 }

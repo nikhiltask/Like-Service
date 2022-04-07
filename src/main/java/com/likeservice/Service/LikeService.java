@@ -1,5 +1,6 @@
 package com.likeservice.Service;
 
+import com.likeservice.ConstantFile.ConstantFiles;
 import com.likeservice.Exception.LikesNotFoundException;
 import com.likeservice.Feign.UserService;
 import com.likeservice.Model.Like;
@@ -26,12 +27,11 @@ public class LikeService {
     public String deleteLikeID(String likeId) {
         if (likeRepository.findById(likeId).isPresent()) {
             likeRepository.deleteById(likeId);
-            return "Deleted successfully";
+            return ConstantFiles.passCode;
         } else {
-            throw new LikesNotFoundException("Id Not Present");
+            throw new LikesNotFoundException(ConstantFiles.errorCode);
         }
     }
-
 
     public List<LikeDto> likesPage(String postOrCommentId, Integer page, Integer pageSize) {
         if (page == null) {
@@ -44,7 +44,7 @@ public class LikeService {
 
         List<Like> allLikes = likeRepository.findBypostorcommentID(postOrCommentId, firstPage);
         if (allLikes.isEmpty()) {
-            throw new LikesNotFoundException("Like ID Doesnot Exists");
+            throw new LikesNotFoundException(ConstantFiles.errorCode);
         }
         List<LikeDto> likeDTOS = new ArrayList<>();
         for (Like like : allLikes) {
@@ -58,27 +58,42 @@ public class LikeService {
     }
 
     public int countLikes(String postOrCommentId) {
-        List<Like> allData = likeRepository.findAll();
-        int count = 0;
-        for (Like like : allData) {
-            if (like.getPostorcommentID().equals(postOrCommentId)) {
-                count++;
+
+            List<Like> allData = likeRepository.findAll();
+            int count = 0;
+            for (Like like : allData) {
+                if (like.getPostorcommentID().equals(postOrCommentId)) {
+                    count++;
+                }
             }
-        }
-        return count;
+            return count;
+
     }
 
-    public Like likeDetailsByID(String likeId) {
-        return likeRepository.findById(likeId).get();
+    public LikeDto likeDetailsByID(String likeId) {
+        if(likeRepository.findById(likeId).isPresent()){
+            Like like=likeRepository.findById(likeId).get();
+
+            LikeDto likeDto= new LikeDto(like.getLikeID(),like.getPostorcommentID(),
+                    userFeign.findByID(like.getLikedBy())
+                    ,like.getCreatedAt());
+            return likeDto;
+        }else {
+            throw new LikesNotFoundException(ConstantFiles.errorCode);
+        }
     }
 
     public LikeDto likeCreate(Like like, String postOrCommentId) {
-        like.setPostorcommentID(postOrCommentId);
-        like.setCreatedAt(LocalDateTime.now());
-        likeRepository.save(like);
-        LikeDto likeDTO = new LikeDto(like.getLikeID(), like.getPostorcommentID(),
-                userFeign.findByID(like.getLikedBy()), like.getCreatedAt());
-        return likeDTO;
+        if(likeRepository.findById(postOrCommentId).isPresent()) {
+            like.setPostorcommentID(postOrCommentId);
+            like.setCreatedAt(LocalDateTime.now());
+            likeRepository.save(like);
+            LikeDto likeDTO = new LikeDto(like.getLikeID(), like.getPostorcommentID(),
+                    userFeign.findByID(like.getLikedBy()), like.getCreatedAt());
+            return likeDTO;
+        }else {
+            throw new LikesNotFoundException(ConstantFiles.errorCode);
+        }
 
     }
 
