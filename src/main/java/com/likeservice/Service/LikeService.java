@@ -1,6 +1,5 @@
 package com.likeservice.Service;
-
-import com.likeservice.ConstantFile.ConstantFiles;
+import com.likeservice.ConstantFile.ConstantNames;
 import com.likeservice.Exception.LikesNotFoundException;
 import com.likeservice.Feign.UserService;
 import com.likeservice.Model.Like;
@@ -27,9 +26,9 @@ public class LikeService {
     public String deleteLikeID(String likeId) {
         if (likeRepository.findById(likeId).isPresent()) {
             likeRepository.deleteById(likeId);
-            return ConstantFiles.passCode;
+            return ConstantNames.SUCCESS_CODE;
         } else {
-            throw new LikesNotFoundException(ConstantFiles.errorCode);
+            throw new LikesNotFoundException(ConstantNames.ERROR_CODE);
         }
     }
 
@@ -44,7 +43,7 @@ public class LikeService {
 
         List<Like> allLikes = likeRepository.findBypostorcommentID(postOrCommentId, firstPage);
         if (allLikes.isEmpty()) {
-            throw new LikesNotFoundException(ConstantFiles.errorCode);
+            throw new LikesNotFoundException(ConstantNames.ERROR_CODE);
         }
         List<LikeDto> likeDTOS = new ArrayList<>();
         for (Like like : allLikes) {
@@ -79,7 +78,7 @@ public class LikeService {
                     ,like.getCreatedAt());
             return likeDto;
         }else {
-            throw new LikesNotFoundException(ConstantFiles.errorCode);
+            throw new LikesNotFoundException(ConstantNames.ERROR_CODE);
         }
     }
 
@@ -92,7 +91,7 @@ public class LikeService {
                     userFeign.findByID(like.getLikedBy()), like.getCreatedAt());
             return likeDTO;
         }else {
-            throw new LikesNotFoundException(ConstantFiles.errorCode);
+            throw new LikesNotFoundException(ConstantNames.ERROR_CODE);
         }
 
     }

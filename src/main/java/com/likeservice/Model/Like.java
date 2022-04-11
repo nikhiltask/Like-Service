@@ -1,6 +1,5 @@
 package com.likeservice.Model;
 
-import com.likeservice.ConstantFile.ConstantFiles;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Document(collection = "LikeService")
 @AllArgsConstructor

@@ -1,6 +1,6 @@
 package com.likeservice.Exception;
 
-import com.likeservice.ConstantFile.ConstantFiles;
+import com.likeservice.ConstantFile.ConstantNames;
 import com.likeservice.Errors.ApiError;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class ServiceExceptionHandler extends ResponseEntityExceptionHandler {
     ResponseEntity customerNotFoundHandler(Exception exception, ServletWebRequest request){
         ApiError apiError = new ApiError();
         apiError.setMessage(exception.getMessage());
-        apiError.setCode(ConstantFiles.errorStatus);
+        apiError.setCode(ConstantNames.ERROR_CODE);
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
     @Override
@@ -38,9 +38,6 @@ public class ServiceExceptionHandler extends ResponseEntityExceptionHandler {
             ApiError apiError = new ApiError();
             apiError.setCode(String.valueOf(status.value()));
             apiError.setMessage(String.valueOf(errors));
-//            apiError.setErrors(errors);
-//            apiError.setPath(request.getDescription(false));
-//            apiError.setTimestamp(LocalDateTime.now());
             return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
         }
     }
