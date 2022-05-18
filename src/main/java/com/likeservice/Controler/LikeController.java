@@ -20,24 +20,28 @@ public class LikeController {
     private LikeService likeService;
 
     @DeleteMapping("/likes/{likeId}")
-    public ResponseEntity<String> deleteLikeID(@PathVariable("likeId") String likeId, @PathVariable("postOrCommentId") String postOrCommentId ){
+    public ResponseEntity<String> deleteLikeID(@PathVariable("likeId") String likeId, @PathVariable("postOrCommentId") String postOrCommentId) {
         return new ResponseEntity<>(likeService.deleteLikeID(likeId), HttpStatus.ACCEPTED);
     }
+
     @GetMapping("/likes")
-    public ResponseEntity<List<LikeDto>> likesPage(@PathVariable("postOrCommentId") String postOrCommentId, @QueryParam("page") Integer  page, @QueryParam("pageSize") Integer  pageSize){
-        return new ResponseEntity<>(likeService.likesPage(postOrCommentId,page,pageSize), HttpStatus.ACCEPTED);
+    public ResponseEntity<List<LikeDto>> likesPage(@PathVariable("postOrCommentId") String postOrCommentId, @QueryParam("page") Integer page, @QueryParam("pageSize") Integer pageSize) {
+        return new ResponseEntity<>(likeService.likesPage(postOrCommentId, page, pageSize), HttpStatus.ACCEPTED);
     }
-      @GetMapping("/likes/count")
-    public ResponseEntity<Integer> countLikes(@PathVariable("postOrCommentId") String postOrCommentId){
+
+    @GetMapping("/likes/count")
+    public ResponseEntity<Integer> countLikes(@PathVariable("postOrCommentId") String postOrCommentId) {
         return new ResponseEntity<>(likeService.countLikes(postOrCommentId), HttpStatus.ACCEPTED);
     }
+
     @GetMapping("/likes/{likeId}")
-    public ResponseEntity<Like> likeDetailsByID(@PathVariable("likeId") String Id, @PathVariable("postOrCommentId") String postOrCommentId){
+    public ResponseEntity<LikeDto> likeDetailsByID(@PathVariable("likeId") String Id, @PathVariable("postOrCommentId") String postOrCommentId) {
         return new ResponseEntity<>(likeService.likeDetailsByID(Id), HttpStatus.ACCEPTED);
     }
+
     @PostMapping("/likes")
-    public ResponseEntity<LikeDto> likeCreate(@PathVariable("postOrCommentId") String postOrCommentId, @RequestBody @Valid Like like){
-        return new ResponseEntity<>(likeService.likeCreate(like,postOrCommentId), HttpStatus.ACCEPTED);
+    public ResponseEntity<LikeDto> likeCreate(@PathVariable("postOrCommentId") String postOrCommentId, @RequestBody @Valid Like like) {
+        return new ResponseEntity<>(likeService.likeCreate(like, postOrCommentId), HttpStatus.ACCEPTED);
 
 
     }

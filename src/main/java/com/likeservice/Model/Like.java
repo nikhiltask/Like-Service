@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Document(collection = "LikeService")
 @AllArgsConstructor
@@ -20,7 +19,7 @@ public class Like {
 
     @Id
     private String likeID;
-
+    @NotEmpty(message = "postorcommentID is required")
     private String postorcommentID;
 
     private String likedBy;
